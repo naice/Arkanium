@@ -34,10 +34,11 @@ jobs:
     # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
     - name: Add .nojekyll file
       run: touch release/wwwroot/.nojekyll
-      
-    - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+    - name: GitHub Pages
+      # You may pin to the exact commit or the version.
+      # uses: crazy-max/ghaction-github-pages@c05ee637ec73429400a359430db8e5629f3f2564
+      uses: crazy-max/ghaction-github-pages@v4.0.0
       with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: release/wwwroot
+        build_dir: release/wwwroot
+        # Allow Jekyll to build your site
+        jekyll: false
