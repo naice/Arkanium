@@ -1,0 +1,31 @@
+﻿@using Arkanium.Navigation
+
+@inherits LayoutComponentBase
+
+<RadzenComponents/>
+
+<div style="display: flex; justify-content: center;">
+    <RadzenLayout class="rz-shadow-7" style="max-width: 900px; flex: 1;">
+        <RadzenHeader class="layout-header">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                <RadzenSidebarToggle Click="@(() => isSidebarExpanded = !isSidebarExpanded)" />
+                <RadzenLabel Text="@(_headerLabel)" style="flex: 1 0 0" />
+            </RadzenStack>
+        </RadzenHeader>
+        <RadzenSidebar @bind-Expanded="@isSidebarExpanded">
+            <NavigationPanel SelectedNavigationItemChanged="@((item) => { isSidebarExpanded = false; _selectedNavigationItem = item; })" />
+        </RadzenSidebar>
+        <RadzenBody>
+            @Body
+        </RadzenBody>
+        <RadzenFooter class="layout-footer">
+            Footer
+        </RadzenFooter>
+    </RadzenLayout>
+</div>
+
+@code {
+    string _headerLabel => "Arkanium" + (_selectedNavigationItem == null ? string.Empty : (" - " + _selectedNavigationItem.Text));
+    NavigationItem? _selectedNavigationItem = null;
+    bool isSidebarExpanded = false;
+}

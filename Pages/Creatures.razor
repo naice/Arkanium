@@ -1,0 +1,102 @@
+﻿
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Arkanium.Controls.List
+@using Arkanium.Model
+@using Arkanium.Services
+
+@page "/creatures"
+@attribute [NavigationPage("Creatures", icon: "arrow_circle_right", sort: 1)]
+
+@inject HttpClient Http
+@inject IClipboardService Clipboard
+@inject ILogger<Index> Log
+
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
+    <RadzenTextBox @oninput="(x) => Search(x?.Value?.ToString())" Placeholder="Find creatures..." style="flex: 1"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Icon="search" style="flex: 0 0 32px;"/>
+</div>
+<RadzenText TextStyle="TextStyle.Overline" Text="Level" />
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
+    <RadzenNumeric ShowUpDown="true" TValue="int" Min="1" Max="10000" @bind-Value=@_creatureLevel Placeholder="Level" style="flex: 1"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="10" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureLevel = 10)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="50" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureLevel = 50)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="150" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureLevel = 150)"/>
+</div>
+<RadzenText TextStyle="TextStyle.Overline" Text="Distance" />
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
+    <RadzenNumeric ShowUpDown="true" TValue="int" Min="1" Max="10000" @bind-Value=@_creatureDistance Placeholder="Distance" style="flex: 1"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="1500" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureDistance = 1500)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="2000" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureDistance = 2000)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="2500" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureDistance = 2500)"/>
+</div>
+
+<List Items="@(_filtered ?? _data)" TItem="ArkCreatureData" Context="item">
+    <ItemContent>
+        <RadzenCard Style="width: 100%; padding:0.5rem" class="rz-mb-2">
+            <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+                <img src="@(item.Image48Source)" style="width: 32px; height: 32px; flex : 0 0 32px" />
+                <div style="flex: 0 0 0.5rem;"></div>
+                <div class="rz-color-secondary" style="flex: 1; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+                    @(item.CreatureName)
+                </div>
+                <div class="rz-color-secondary" style="flex: 1; min-width: 90px; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+                    @(item.CreatureId)
+                </div>
+                <div style="flex: 0 0 0.5rem;"></div>
+                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Text="@_creatureLevel.ToString()" Size="ButtonSize.Small" Click="@(() => CopySpawnDino(item, _creatureLevel, _creatureDistance))"/>
+                <div style="flex: 0 0 0.5rem;"></div>
+                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Size="ButtonSize.Small" Click="@(() => CopySummon(item))"/>
+            </div>
+        </RadzenCard>
+    </ItemContent>
+    <Placeholder>
+        <div>Loading..</div>
+    </Placeholder>
+</List>
+
+@code
+{
+    private int _creatureDistance = 1500;
+    private int _creatureLevel = 150;
+    private ICollection<ArkCreatureData> _data = Array.Empty<ArkCreatureData>();
+    private ICollection<ArkCreatureData>? _filtered = null;
+
+    private async void CopySpawnDino(ArkCreatureData item, int level, int distance = 1750)
+    {
+        await Clipboard.CopyToClipboard(item.SpawnDino.Replace(" 0 0 0 0", $" {distance} 0 0 {level}"));
+    }
+    private async void CopySummon(ArkCreatureData item)
+    {
+        await Clipboard.CopyToClipboard(item.Summon);
+    }
+
+    private void Search(string? text)
+    {
+        if (text == null || text.Length < 3) 
+        {
+            _filtered = null;
+            return;
+        }
+
+        var searchToken = text.ToLowerInvariant();
+
+        _filtered = 
+            _data.Where(x => 
+                    x.CreatureId.ToLowerInvariant().Contains(searchToken)
+                    || x.CreatureName.ToLowerInvariant().Contains(searchToken))
+                .ToArray();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _filtered = _data = await Http.GetFromJsonAsync<ArkCreatureData[]>("/data-creature.json") ?? Array.Empty<ArkCreatureData>();
+
+        await base.OnInitializedAsync();
+    }
+}
