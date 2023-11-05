@@ -3,7 +3,7 @@
 <RadzenPanelMenu>
     @foreach (var navItem in NavigationItems)
     {
-        <RadzenPanelMenuItem Text="@(navItem.Text)" Path="@(navItem.Items.Count > 0 ? null : navItem.Route)" Icon="@(navItem.Icon)" 
+        <RadzenPanelMenuItem Text="@(navItem.Text)" Path="@(navItem.Items.Count > 0 ? null : navItem.Route.TrimStart('/'))" Icon="@(navItem.Icon)" 
             Click="@(async () => {if(navItem.Items.Count > 0) return;  SelectedNavigationItem = navItem; await SelectedNavigationItemChanged.InvokeAsync(navItem);})">
             @foreach (var navItem2 in navItem.Items)
             {

@@ -95,7 +95,7 @@
     }
     protected override async Task OnInitializedAsync()
     {
-        _filtered = _data = await Http.GetFromJsonAsync<ArkCreatureData[]>("/data-creature.json") ?? Array.Empty<ArkCreatureData>();
+        _filtered = _data = await Http.GetFromJsonAsync<ArkCreatureData[]>("data-creature.json") ?? Array.Empty<ArkCreatureData>();
 
         await base.OnInitializedAsync();
     }
