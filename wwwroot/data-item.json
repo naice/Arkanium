@@ -1654,7 +1654,7 @@
   {
     "ItemId": "90",
     "ItemName": "Wooden Ramp",
-    "GFICode": "cheat gfi WoodRamp 1 1 0",
+    "GFICode": "cheat gfi Ramp_Wood 1 1 0",
     "Image32Source": "image/item/32/wooden-ramp.png",
     "Image120Source": "image/item/120/wooden-ramp.png"
   },
@@ -2333,35 +2333,35 @@
   {
     "ItemId": "391",
     "ItemName": "Sloped Thatch Wall Left",
-    "GFICode": "cheat gfi ThatchWall_Sloped_Left 1 1 0",
+    "GFICode": "cheat gfi ThatchWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-thatch-wall-left.png",
     "Image120Source": "image/item/120/sloped-thatch-wall-left.png"
   },
   {
     "ItemId": "392",
     "ItemName": "Sloped Thatch Wall Right",
-    "GFICode": "cheat gfi ThatchWall_Sloped_Right 1 1 0",
+    "GFICode": "cheat gfi ThatchWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-thatch-wall-right.png",
     "Image120Source": "image/item/120/sloped-thatch-wall-right.png"
   },
   {
     "ItemId": "393",
     "ItemName": "Sloped Wooden Roof",
-    "GFICode": "cheat gfi WoodRoof 1 1 0",
+    "GFICode": "cheat gfi Ramp_Wood 1 1 0",
     "Image32Source": "image/item/32/sloped-wooden-roof.png",
     "Image120Source": "image/item/120/sloped-wooden-roof.png"
   },
   {
     "ItemId": "394",
-    "ItemName": "Sloped Wood Wall Left",
-    "GFICode": "cheat gfi WoodWall_Sloped_Left 1 1 0",
+    "ItemName": "Sloped Wooden Wall",
+    "GFICode": "cheat gfi WoodWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-wood-wall-left.png",
     "Image120Source": "image/item/120/sloped-wood-wall-left.png"
   },
   {
     "ItemId": "395",
-    "ItemName": "Sloped Wood Wall Right",
-    "GFICode": "cheat gfi WoodWall_Sloped_Right 1 1 0",
+    "ItemName": "Sloped Wooden Wall Right",
+    "GFICode": "cheat gfi WoodWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-wood-wall-right.png",
     "Image120Source": "image/item/120/sloped-wood-wall-right.png"
   },
@@ -2375,14 +2375,14 @@
   {
     "ItemId": "397",
     "ItemName": "Sloped Stone Wall Left",
-    "GFICode": "cheat gfi StoneWall_Sloped_Left 1 1 0",
+    "GFICode": "cheat gfi StoneWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-stone-wall-left.png",
     "Image120Source": "image/item/120/sloped-stone-wall-left.png"
   },
   {
     "ItemId": "398",
     "ItemName": "Sloped Stone Wall Right",
-    "GFICode": "cheat gfi StoneWall_Sloped_Right 1 1 0",
+    "GFICode": "cheat gfi StoneWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-stone-wall-right.png",
     "Image120Source": "image/item/120/sloped-stone-wall-right.png"
   },
@@ -2396,14 +2396,14 @@
   {
     "ItemId": "400",
     "ItemName": "Sloped Metal Wall Left",
-    "GFICode": "cheat gfi MetalWall_Sloped_Left 1 1 0",
+    "GFICode": "cheat gfi MetalWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-metal-wall-left.png",
     "Image120Source": "image/item/120/sloped-metal-wall-left.png"
   },
   {
     "ItemId": "401",
     "ItemName": "Sloped Metal Wall Right",
-    "GFICode": "cheat gfi MetalWall_Sloped_Right 1 1 0",
+    "GFICode": "cheat gfi MetalWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-metal-wall-right.png",
     "Image120Source": "image/item/120/sloped-metal-wall-right.png"
   },
@@ -2452,14 +2452,14 @@
   {
     "ItemId": "437",
     "ItemName": "Sloped Greenhouse Wall Left",
-    "GFICode": "cheat gfi GreenhouseWall_Sloped_Left 1 1 0",
+    "GFICode": "cheat gfi GreenhouseWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-greenhouse-wall-left.png",
     "Image120Source": "image/item/120/sloped-greenhouse-wall-left.png"
   },
   {
     "ItemId": "438",
     "ItemName": "Sloped Greenhouse Wall Right",
-    "GFICode": "cheat gfi GreenhouseWall_Sloped_Right 1 1 0",
+    "GFICode": "cheat gfi GreenhouseWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-greenhouse-wall-right.png",
     "Image120Source": "image/item/120/sloped-greenhouse-wall-right.png"
   },
@@ -2921,14 +2921,14 @@
   {
     "ItemId": "AdobeWall_Sloped_Left",
     "ItemName": "Sloped Adobe Wall Left",
-    "GFICode": "cheat gfi AdobeWall_Sloped_Left 1 1 0",
+    "GFICode": "cheat gfi AdobeWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-adobe-wall-left.png",
     "Image120Source": "image/item/120/sloped-adobe-wall-left.png"
   },
   {
     "ItemId": "AdobeWall_Sloped_Right",
     "ItemName": "Sloped Adobe Wall Right",
-    "GFICode": "cheat gfi AdobeWall_Sloped_Right 1 1 0",
+    "GFICode": "cheat gfi AdobeWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-adobe-wall-right.png",
     "Image120Source": "image/item/120/sloped-adobe-wall-right.png"
   },
@@ -3040,14 +3040,14 @@
   {
     "ItemId": "TekWall_Sloped_Left",
     "ItemName": "Sloped Tek Wall Left",
-    "GFICode": "cheat gfi TekWall_Sloped_Left 1 1 0",
+    "GFICode": "cheat gfi TekWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-tek-wall-left.png",
     "Image120Source": "image/item/120/sloped-tek-wall-left.png"
   },
   {
     "ItemId": "TekWall_Sloped_Right",
     "ItemName": "Sloped Tek Wall Right",
-    "GFICode": "cheat gfi TekWall_Sloped_Right 1 1 0",
+    "GFICode": "cheat gfi TekWall_Sloped 1 1 0",
     "Image32Source": "image/item/32/sloped-tek-wall-right.png",
     "Image120Source": "image/item/120/sloped-tek-wall-right.png"
   },
@@ -8078,6 +8078,13 @@
     "Image120Source": "image/item/120/adobe-triangle-ceiling.png"
   },
   {
+    "ItemId": "479",
+    "ItemName": "Adobe Triangle Quarter",
+    "GFICode": "cheat gfi TriCeiling_Adobe 1 1 0",
+    "Image32Source": "image/item/32/adobe-triangle-ceiling.png",
+    "Image120Source": "image/item/120/adobe-triangle-ceiling.png"
+  },
+  {
     "ItemId": "485",
     "ItemName": "Adobe Triangle Foundation",
     "GFICode": "cheat gfi TriFoundation_Adobe 1 1 0",
@@ -8115,6 +8122,13 @@
   {
     "ItemId": "480",
     "ItemName": "Greenhouse Triangle Ceiling",
+    "GFICode": "cheat gfi TriCeiling_Greenhouse 1 1 0",
+    "Image32Source": "image/item/32/greenhouse-triangle-ceiling.png",
+    "Image120Source": "image/item/120/greenhouse-triangle-ceiling.png"
+  },
+  {
+    "ItemId": "480",
+    "ItemName": "Greenhouse Triangle Quarter",
     "GFICode": "cheat gfi TriCeiling_Greenhouse 1 1 0",
     "Image32Source": "image/item/32/greenhouse-triangle-ceiling.png",
     "Image120Source": "image/item/120/greenhouse-triangle-ceiling.png"
@@ -8204,6 +8218,13 @@
     "Image120Source": "image/item/120/metal-triangle-ceiling.png"
   },
   {
+    "ItemId": "481",
+    "ItemName": "Metal Triangle Quarter",
+    "GFICode": "cheat gfi TriCeiling_Metal 1 1 0",
+    "Image32Source": "image/item/32/metal-triangle-ceiling.png",
+    "Image120Source": "image/item/120/metal-triangle-ceiling.png"
+  },
+  {
     "ItemId": "486",
     "ItemName": "Metal Triangle Foundation",
     "GFICode": "cheat gfi TriFoundation_Metal 1 1 0",
@@ -8255,6 +8276,13 @@
   {
     "ItemId": "482",
     "ItemName": "Stone Triangle Ceiling",
+    "GFICode": "cheat gfi TriCeiling_Stone 1 1 0",
+    "Image32Source": "image/item/32/stone-triangle-ceiling.png",
+    "Image120Source": "image/item/120/stone-triangle-ceiling.png"
+  },
+  {
+    "ItemId": "482",
+    "ItemName": "Stone Triangle Quarter",
     "GFICode": "cheat gfi TriCeiling_Stone 1 1 0",
     "Image32Source": "image/item/32/stone-triangle-ceiling.png",
     "Image120Source": "image/item/120/stone-triangle-ceiling.png"
@@ -8316,6 +8344,13 @@
     "Image120Source": "image/item/120/tek-triangle-ceiling.png"
   },
   {
+    "ItemId": "483",
+    "ItemName": "Tek Triangle Quarter",
+    "GFICode": "cheat gfi TriCeiling_Tek 1 1 0",
+    "Image32Source": "image/item/32/tek-triangle-ceiling.png",
+    "Image120Source": "image/item/120/tek-triangle-ceiling.png"
+  },
+  {
     "ItemId": "488",
     "ItemName": "Tek Triangle Foundation",
     "GFICode": "cheat gfi TriFoundation_Tek 1 1 0",
@@ -8360,6 +8395,13 @@
   {
     "ItemId": "484",
     "ItemName": "Wooden Triangle Ceiling",
+    "GFICode": "cheat gfi TriCeiling_Wood 1 1 0",
+    "Image32Source": "image/item/32/wooden-triangle-ceiling.png",
+    "Image120Source": "image/item/120/wooden-triangle-ceiling.png"
+  },
+  {
+    "ItemId": "484",
+    "ItemName": "Wooden Triangle Quarter",
     "GFICode": "cheat gfi TriCeiling_Wood 1 1 0",
     "Image32Source": "image/item/32/wooden-triangle-ceiling.png",
     "Image120Source": "image/item/120/wooden-triangle-ceiling.png"
