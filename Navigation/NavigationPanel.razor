@@ -8,7 +8,7 @@
             Click="@(async () => {if(navItem.Items.Count > 0) return;  SelectedNavigationItem = navItem; await SelectedNavigationItemChanged.InvokeAsync(navItem);})">
             @foreach (var navItem2 in navItem.Items)
             {
-                <RadzenPanelMenuItem Text="@(navItem2.Text)" Path="@(navItem2.Route)" Icon="@(navItem2.Icon)" Image="@(navItem2.Image)"
+                <RadzenPanelMenuItem Text="@(navItem2.Text)" Path="@(navItem2.Route.TrimStart('/'))" Icon="@(navItem2.Icon)" Image="@(navItem2.Image)"
                     Click="@(async () => {SelectedNavigationItem = navItem2; await SelectedNavigationItemChanged.InvokeAsync(navItem2);})"/>
             }
         </RadzenPanelMenuItem>
