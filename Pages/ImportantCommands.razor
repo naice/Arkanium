@@ -1,0 +1,32 @@
+﻿
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Arkanium.Controls.List
+@using Arkanium.Model
+@using Arkanium.Services
+
+@page "/importantcommands"
+@attribute [NavigationPage("Important Commands", icon: "arrow_circle_right", sort: 1)]
+
+@inject HttpClient Http
+@inject IClipboardService Clipboard
+@inject ILogger<Index> Log
+
+<RadzenText TextStyle="TextStyle.Subtitle1">
+    Enable cheats
+</RadzenText>
+<RadzenText TextStyle="TextStyle.Body2">
+    enablecheats [ADMINPASSWORD]
+</RadzenText>
+<RadzenText TextStyle="TextStyle.Subtitle1">
+    Free Movement
+</RadzenText>
+<RadzenText TextStyle="TextStyle.Body2">
+    cheat infiniteweight<br/>
+    cheat infinitestats<br/>
+    cheat fly<br/>
+    cheat walk<br/>
+</RadzenText>
+
+@code
+{ 
+}

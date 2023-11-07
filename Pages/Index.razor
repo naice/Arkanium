@@ -1,15 +1,19 @@
 ﻿
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Arkanium.Controls.List
+@using Arkanium.Controls.Overlay
+@using Arkanium.Controls.Overlays
 @using Arkanium.Model
 @using Arkanium.Services
 
 @page "/"
-@attribute [NavigationPage("Items", icon: "arrow_circle_right", sort: 0)]
+@attribute [NavigationPage("Items", icon: "arrow_circle_right", sort: 0, typeof(ItemSetsSubItemProvider))]
 
 @inject HttpClient Http
 @inject IClipboardService Clipboard
 @inject ILogger<Index> Log
+@inject IItemSetService ItemSetService
+@inject IOverlayService OverlayService
 
 <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
     <RadzenTextBox @oninput="(x) => Search(x?.Value?.ToString())" Placeholder="Find items..." style="flex: 1"/>
@@ -32,6 +36,8 @@
     <ItemContent>
         <RadzenCard Style="width: 100%; padding:0.5rem" class="rz-mb-2">
             <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+                <RadzenCheckBox Value="@(_itemBasket.Any(x => x.ItemId == item.ItemId && x.ItemName == item.ItemName))" @onclick="() => AddToBasket(item)" style="flex: 0 1 0;"/>
+                <div style="flex: 0 0 0.5rem;"></div>
                 <img src="@(item.Image32Source)" style="width: 32px; height: 32px; flex : 0 0 32px" />
                 <div style="flex: 0 0 0.5rem;"></div>
                 <div class="rz-color-secondary" style="flex: 1; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
@@ -41,7 +47,7 @@
                     @(item.ItemId)
                 </div>
                 <div style="flex: 0 0 0.5rem;"></div>
-                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Size="ButtonSize.Small" Click="@(() => CopyGFICode(item, _count))"/>
+                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Size="ButtonSize.Small" Click="@(() => CopyGFICode(item))"/>
             </div>
         </RadzenCard>
     </ItemContent>
@@ -50,15 +56,36 @@
     </Placeholder>
 </List>
 
+@if(_itemBasket.Count > 0)
+{
+    <div style="position: fixed; right: 1rem; bottom: 1rem; overflow: visible;">
+        <RadzenBadge 
+            BadgeStyle="BadgeStyle.Info" 
+            Text="@_itemBasket.Count.ToString()"
+            style="position: absolute; top: -5px; left: -5px; min-width: 20px;"
+            class="rz-border-radius-3 rz-shadow-3"/>
+        <RadzenButton 
+            Click=@(CreateItemSetFromBasket)
+            ButtonStyle="ButtonStyle.Primary" 
+            Icon="playlist_add" 
+            Size="ButtonSize.Large" 
+            class="rz-border-radius-10 rz-shadow-10"/>
+    </div>
+}
+
 @code
 {
+    private System.Collections.Generic.List<ArkItemData> _itemBasket = new();
     private int _count = 1;
     private ICollection<ArkItemData> _data = Array.Empty<ArkItemData>();
     private ICollection<ArkItemData>? _filtered = null;
 
-    private async void CopyGFICode(ArkItemData item, int count)
+    private string BuildGFICode(ArkItemData item)
+        => item.GFICode.Replace("1 1 0", $"{_count} 1 0");
+
+    private async void CopyGFICode(ArkItemData item)
     {
-        await Clipboard.CopyToClipboard(item.GFICode.Replace("1 1 0", $"{count} 1 0"));
+        await Clipboard.CopyToClipboard(BuildGFICode(item));
     }
 
     private void Search(string? text)
@@ -82,5 +109,40 @@
         _filtered = _data = await Http.GetFromJsonAsync<ArkItemData[]>("data-item.json") ?? Array.Empty<ArkItemData>();
 
         await base.OnInitializedAsync();
+    }
+
+    private void AddToBasket(ArkItemData item)
+    {
+        if (_itemBasket.Any(x => x.ItemId == item.ItemId && x.ItemName == item.ItemName))
+        {
+            _itemBasket.RemoveAll(x => x.ItemId == item.ItemId && x.ItemName == item.ItemName);
+            return;
+        }
+
+        _itemBasket.Add(new () {
+            GFICode = BuildGFICode(item),
+            Image120Source = item.Image120Source,
+            Image32Source = item.Image32Source,
+            ItemId = item.ItemId,
+            ItemName = item.ItemName,
+        });
+    }
+    private async Task CreateItemSetFromBasket()
+    {
+        ItemSet? set = new();
+        var first = _itemBasket.First();
+        set.Image120Source = first.Image120Source;
+        set.Image32Source = first.Image32Source;
+        set.Items.AddRange(_itemBasket);
+
+        
+        var overlayResult = await OverlayService.ShowOverlay<ItemSetOverlay, ItemSet>(set); 
+        if(!overlayResult.Success)
+            return;
+
+        var itemSets = await ItemSetService.GetItemSetsAsync();
+        itemSets.Add(set);
+        await ItemSetService.SaveChanges();
+        _itemBasket.Clear();
     }
 }

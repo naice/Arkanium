@@ -1,0 +1,105 @@
+﻿
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Arkanium.Controls.List
+@using Arkanium.Controls.Overlay
+@using Arkanium.Controls.Overlays
+@using Arkanium.Model
+@using Arkanium.Services
+
+@page "/itemset/{ItemSetId}"
+
+@inject IClipboardService Clipboard
+@inject ILogger<Index> Log
+@inject IItemSetService ItemSetService
+@inject NavigationManager NavigationMan
+@inject IOverlayService OverlayService
+
+@if(_itemSet != null)
+{
+    <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem;">
+        <img src="@(_itemSet.Image32Source)" style="width: 32px; height: 32px; flex : 0 0 32px" />
+        <div style="flex: 0 0 0.5rem;"></div>
+        <div style="flex: 1; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+            <b>@(_itemSet.Name)</b>
+        </div>
+        <div style="flex: 0 0 0.5rem;"></div>
+        <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Click="@(() => CopyGFICode(_itemSet))"/>
+    </div>
+    <List Items="@(_itemSet.Items)" TItem="ArkItemData" Context="item">
+        <ItemContent>
+            <RadzenCard Style="width: 100%; padding:0.5rem" class="rz-mb-2">
+                <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+                    <img src="@(item.Image32Source)" style="width: 32px; height: 32px; flex : 0 0 32px" />
+                    <div style="flex: 0 0 0.5rem;"></div>
+                    <div class="rz-color-secondary" style="flex: 1; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+                        @(item.ItemName)
+                    </div>
+                    <div class="rz-color-secondary" style="flex: 1; min-width: 90px; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+                        @(item.GFICode)
+                    </div>
+                </div>
+            </RadzenCard>
+        </ItemContent>
+        <Placeholder>
+            <div>Loading..</div>
+        </Placeholder>
+    </List>
+    <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem;">
+        <div style="flex: 0 0 0.5rem;"></div>
+        <RadzenButton style="flex: 0 0 1;" Icon="edit" Click="@(() => Edit())"/>
+        <div style="flex: 0 0 0.5rem;"></div>
+        <RadzenButton style="flex: 0 0 1;" Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@(() => DeleteMe())"/>
+    </div>
+}
+
+@code
+{
+    [Parameter]
+    public string ItemSetId { get; set; } = string.Empty;
+
+    private ItemSet? _itemSet;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!Guid.TryParse(ItemSetId, out var id))
+            return;
+        var sets = await ItemSetService.GetItemSetsAsync();
+        _itemSet = sets.FirstOrDefault(x => x.Id == id);
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task Edit()
+    {
+        if (_itemSet == null) return;
+        var n = new ItemSet() {
+            Id = _itemSet.Id,
+            Image120Source = _itemSet.Image120Source,
+            Image32Source = _itemSet.Image32Source,
+            Items = _itemSet.Items.ToList(),
+            Name = _itemSet.Name,
+        };
+        var overlayResult = await OverlayService.ShowOverlay<ItemSetOverlay, ItemSet>(n); 
+        if(!overlayResult.Success)
+            return;
+        
+        _itemSet.Id = n.Id;
+        _itemSet.Image120Source = n.Image120Source;
+        _itemSet.Image32Source = n.Image32Source;
+        _itemSet.Items = n.Items;
+        _itemSet.Name = n.Name;
+
+        await ItemSetService.SaveChanges();
+    }
+
+    private async Task CopyGFICode(ItemSet itemSet)
+    {
+        await Clipboard.CopyToClipboard(string.Join(" | ", itemSet.Items.Select(x => x.GFICode)));
+    }
+    private async Task DeleteMe()
+    {
+        var sets = await ItemSetService.GetItemSetsAsync();
+        sets.Remove(_itemSet!);
+        await ItemSetService.SaveChanges();
+        NavigationMan.NavigateTo("");
+    }
+}

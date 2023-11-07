@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.JSInterop;
 
 namespace Arkanium.Services;

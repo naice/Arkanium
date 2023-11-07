@@ -1,5 +1,8 @@
 using Arkanium;
+using Arkanium.Controls.Overlay;
+using Arkanium.Navigation;
 using Arkanium.Services;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -19,7 +22,14 @@ services.AddScoped(sp => {
     return client;
 });
 
+// 3rd party
+services.AddBlazoredLocalStorage();
 services.AddRadzenComponents();
+
+// My
+services.AddScoped<IItemSetService, ItemSetService>();
+services.AddScoped<IOverlayService, OverlayService>();
+services.AddScoped<INavigationPanelService, NavigationPanelService>();
 
 var host = builder.Build();
 

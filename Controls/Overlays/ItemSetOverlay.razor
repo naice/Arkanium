@@ -1,0 +1,98 @@
+@using Model
+@using Arkanium.Controls.Overlay
+
+@inherits OverlayDataBase<ItemSet>
+    
+@inject HttpClient Http
+
+<RadzenCard style="margin:0.5rem; padding:0.5rem; min-width:500px;" class="rz-mt-2">
+    <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem;">
+        <RadzenText TextStyle="TextStyle.Overline" Text="Create Item Set" style="flex: 1; text-overflow: ellipsis; text-wrap: nowrap; overflow:hidden;"/>
+        <div style="flex: 0 0 0.5rem;">
+        </div>
+        <RadzenButton Click="@(async () => { OverlayData = null; Fail();})" Icon="close" ButtonStyle="ButtonStyle.Light" style="width: 100%; flex: 0 0 32px;"/>
+    </div>
+@if (OverlayData != null)
+{
+    <RadzenTemplateForm Data="@OverlayData" Submit="@((ItemSet itemSet) => { OverlayData = itemSet; Succeed(); })">       
+        <RadzenStack Gap="1rem">
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="*Name" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenStack Gap="0.1rem">
+                        <RadzenTextBox Style="width: 100%;" Name="Name" Placeholder="Item set name" @bind-Value="OverlayData.Name" />
+                        <RadzenRequiredValidator Component="Name" Text="Your item set needs a name." />
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12" SizeMD="4">
+                    <RadzenLabel Text="Icon" />
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeMD="8">
+                    <RadzenDropDown 
+                        @bind-Value="OverlayData.Image32Source" 
+                        AllowClear="false" AllowVirtualization="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                        Placeholder="Select an icon for this icon set" 
+                        Data="@_itemData" 
+                        Style="width: 100%; min-height:48px;" 
+                        ValueProperty="Image32Source" 
+                        TextProperty="ItemName"
+                        Name="Image32Source" 
+                        Context="itemCtx">
+                        <Template>
+                            @{
+                                var item = (ArkItemData)itemCtx;
+                            }
+                            <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+                                <img src="@(item.Image32Source)" style="width: 32px; height: 32px; flex : 0 0 32px" />
+                                <div style="flex: 0 0 0.5rem;"></div>
+                                <div style="flex: 1; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+                                    @(item.ItemName)
+                                </div>
+                            </div>
+                        </Template>
+                    </RadzenDropDown>
+                </RadzenColumn>
+            </RadzenRow>
+            @foreach(var item in OverlayData.Items)
+            {
+                <RadzenCard Style="width: 100%; padding:0.5rem" class="rz-mb-2">
+                    <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+                        <img src="@(item.Image32Source)" style="width: 32px; height: 32px; flex : 0 0 32px" />
+                        <div style="flex: 0 0 0.5rem;"></div>
+                        <div class="rz-color-secondary" style="flex: 1; text-overflow: ellipsis; text-wrap: wrap; overflow:hidden;">
+                            @(item.ItemName)
+                        </div>
+                        @* <RadzenNumeric ShowUpDown="true" TValue="int" Min="1" Max="10000" Placeholder="Item count" style="flex: 1"
+                            @bind-Value:set="v => SetGFICodeCount(item, v)"
+                            @bind-Value:get="GetGFICodeCount(item)" /> *@
+                        <div style="flex: 0 0 0.5rem;"></div>
+                        <RadzenButton style="flex: 0 0 1;" Icon="delete" Size="ButtonSize.Small"  ButtonStyle="ButtonStyle.Danger" Click="@(() => { OverlayData.Items.Remove(item); if (OverlayData.Items.Count == 0) Fail(); })"/>
+                    </div>
+                </RadzenCard>
+            }
+        </RadzenStack>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" Class="rz-mt-8 rz-mb-4">
+            <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Medium" Icon="save" Text="Save" />
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Icon="cancel" Text="Cancel" Click="@(() => {OverlayData = null; Fail();})" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+}
+</RadzenCard>
+
+@code {
+
+    private ICollection<ArkItemData> _itemData = Array.Empty<ArkItemData>();
+    private void SetGFICodeCount(ArkItemData item, int count)
+        => item.GFICode = item.GFICode.Replace("1 1 0", $"{count} 1 0");
+    private int GetGFICodeCount(ArkItemData item)
+        => item.GFICode.Split(' ').TakeLast(3).Select(int.Parse).First();
+    protected override async Task OnInitializedAsync()
+    {
+        _itemData = await Http.GetFromJsonAsync<ArkItemData[]>("data-item.json") ?? Array.Empty<ArkItemData>();
+        await base.OnInitializedAsync();
+    }
+}
