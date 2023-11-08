@@ -58,18 +58,20 @@
 
 @if(_itemBasket.Count > 0)
 {
-    <div style="position: fixed; right: 1rem; bottom: 1rem; overflow: visible;">
-        <RadzenBadge 
-            BadgeStyle="BadgeStyle.Info" 
-            Text="@_itemBasket.Count.ToString()"
-            style="position: absolute; top: -5px; left: -5px; min-width: 20px;"
-            class="rz-border-radius-3 rz-shadow-3"/>
-        <RadzenButton 
-            Click=@(CreateItemSetFromBasket)
-            ButtonStyle="ButtonStyle.Primary" 
-            Icon="playlist_add" 
-            Size="ButtonSize.Large" 
-            class="rz-border-radius-10 rz-shadow-10"/>
+    <div style="position: sticky; bottom: 1rem; display: flex; justify-content: flex-end; overflow: visible;">
+        <div style="flex: 0">
+            <RadzenBadge 
+                BadgeStyle="BadgeStyle.Info" 
+                Text="@_itemBasket.Count.ToString()"
+                style="position: relative; top: 15px; left: -5px; min-width: 20px;"
+                class="rz-border-radius-3 rz-shadow-3"/>
+            <RadzenButton 
+                Click=@(CreateItemSetFromBasket)
+                ButtonStyle="ButtonStyle.Primary" 
+                Icon="playlist_add" 
+                Size="ButtonSize.Large" 
+                class="rz-border-radius-10 rz-shadow-10"/>
+        </div>
     </div>
 }
 
