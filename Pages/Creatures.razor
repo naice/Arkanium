@@ -5,7 +5,7 @@
 @using Arkanium.Services
 
 @page "/creatures"
-@attribute [NavigationPage("Creatures", icon: "arrow_circle_right", sort: 1)]
+@attribute [NavigationPage("Creatures", image: "image/otter.webp", sort: 1)]
 
 @inject HttpClient Http
 @inject IClipboardService Clipboard
@@ -50,9 +50,9 @@
                     @(item.CreatureId)
                 </div>
                 <div style="flex: 0 0 0.5rem;"></div>
-                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Text="@_creatureLevel.ToString()" Size="ButtonSize.Small" Click="@(() => CopySpawnDino(item, _creatureLevel, _creatureDistance))"/>
+                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Text="Wild" Size="ButtonSize.Small" Click="@(() => CopySpawnDino(item))"/>
                 <div style="flex: 0 0 0.5rem;"></div>
-                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Size="ButtonSize.Small" Click="@(() => CopySummon(item))"/>
+                <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Text="Tamed" Size="ButtonSize.Small" Click="@(() => CopySummon(item))"/>
             </div>
         </RadzenCard>
     </ItemContent>
@@ -68,13 +68,14 @@
     private ICollection<ArkCreatureData> _data = Array.Empty<ArkCreatureData>();
     private ICollection<ArkCreatureData>? _filtered = null;
 
-    private async void CopySpawnDino(ArkCreatureData item, int level, int distance = 1750)
+    private async void CopySpawnDino(ArkCreatureData item)
     {
-        await Clipboard.CopyToClipboard(item.SpawnDino.Replace(" 0 0 0 0", $" {distance} 0 0 {level}"));
+        await Clipboard.CopyToClipboard(item.SpawnDino.Replace(" 0 0 0 0", $" {_creatureDistance} 0 0 {_creatureLevel}"));
     }
+    
     private async void CopySummon(ArkCreatureData item)
     {
-        await Clipboard.CopyToClipboard(item.Summon);
+        await Clipboard.CopyToClipboard($"cheat gmsummon \"{item.CreatureId}\" {_creatureLevel}");
     }
 
     private void Search(string? text)

@@ -7,7 +7,7 @@
 @using Arkanium.Services
 
 @page "/"
-@attribute [NavigationPage("Items", icon: "arrow_circle_right", sort: 0, typeof(ItemSetsSubItemProvider))]
+@attribute [NavigationPage("Items", image: "image/item/32/spoiled-meat.png", sort: 0, subItemProvider: typeof(ItemSetsSubItemProvider))]
 
 @inject HttpClient Http
 @inject IClipboardService Clipboard

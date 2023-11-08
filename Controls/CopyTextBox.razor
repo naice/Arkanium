@@ -1,0 +1,29 @@
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Arkanium.Controls.List
+@using Arkanium.Controls.Overlay
+@using Arkanium.Controls.Overlays
+@using Arkanium.Model
+@using Arkanium.Services
+
+@inject IClipboardService Clipboard
+@inject ILogger<Index> Log
+
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+    <RadzenTextBox @bind-Value=Text Placeholder=@Placeholder style="flex: 1" ReadOnly=true/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Size="ButtonSize.Small" Click="@(() => CopyText())"/>
+</div>
+
+@code
+{
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string? Placeholder { get; set; } = null;
+
+    public async void CopyText()
+    {
+        await Clipboard.CopyToClipboard(Text);
+    }
+}
