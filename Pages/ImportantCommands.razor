@@ -18,18 +18,19 @@
             Enter your admin password
         </RadzenText>
         <RadzenTextBox Placeholder="Admin password" @bind-Value=_adminPassword />
+        <CopyTextBox Text="@("enablecheats " + _adminPassword)"/>
     </div>
     <div>
         <RadzenText TextStyle="TextStyle.Subtitle1">
             Building mode On
         </RadzenText>
-        <CopyTextBox Text="@("enablecheats " + _adminPassword + " | cheat fly | cheat infiniteweight | cheat infinitestats ")"/>
+        <CopyTextBox Text="@("cheat fly | cheat infiniteweight | cheat infinitestats ")"/>
     </div>
     <div>
         <RadzenText TextStyle="TextStyle.Subtitle1">
             Building mode Off
         </RadzenText>
-        <CopyTextBox Text="@("enablecheats " + _adminPassword + " | cheat walk | cheat infiniteweight | cheat infinitestats ")"/>
+        <CopyTextBox Text="@("cheat walk | cheat infiniteweight | cheat infinitestats ")"/>
     </div>
 </RadzenStack>
 
