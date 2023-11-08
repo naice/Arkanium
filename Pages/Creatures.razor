@@ -5,7 +5,7 @@
 @using Arkanium.Services
 
 @page "/creatures"
-@attribute [NavigationPage("Creatures", image: "image/otter.webp", sort: 1)]
+@attribute [NavigationPage("Creature commands", icon: "terminal", sort: 2)]
 
 @inject HttpClient Http
 @inject IClipboardService Clipboard
@@ -72,7 +72,7 @@
     {
         await Clipboard.CopyToClipboard(item.SpawnDino.Replace(" 0 0 0 0", $" {_creatureDistance} 0 0 {_creatureLevel}"));
     }
-    
+
     private async void CopySummon(ArkCreatureData item)
     {
         await Clipboard.CopyToClipboard($"cheat gmsummon \"{item.CreatureId}\" {_creatureLevel}");

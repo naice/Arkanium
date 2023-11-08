@@ -8,7 +8,7 @@
 @inject IClipboardService Clipboard
 @inject ILogger<Index> Log
 
-<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;">
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end;" @attributes=Attributes>
     <RadzenTextBox @bind-Value=Text Placeholder=@Placeholder style="flex: 1" ReadOnly=true/>
     <div style="flex: 0 0 0.5rem;"></div>
     <RadzenButton style="flex: 0 0 1;" Icon="content_copy" Size="ButtonSize.Small" Click="@(() => CopyText())"/>
@@ -21,6 +21,8 @@
     
     [Parameter]
     public string? Placeholder { get; set; } = null;
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> Attributes { get; set; } = new ();
 
     public async void CopyText()
     {

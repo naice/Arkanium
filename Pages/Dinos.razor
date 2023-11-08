@@ -1,0 +1,126 @@
+﻿
+@using Arkanium.Controls
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Arkanium.Controls.List
+@using Arkanium.Model
+@using Arkanium.Services
+
+@page "/dinos"
+@attribute [NavigationPage("Dinos", image: "image/otter.webp", sort: 1)]
+
+@inject HttpClient Http
+@inject IClipboardService Clipboard
+@inject ILogger<Index> Log
+
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
+    <RadzenTextBox @oninput="(x) => Search(x?.Value?.ToString())" Placeholder="Find creatures..." style="flex: 1"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Icon="search" style="flex: 0 0 32px;"/>
+</div>
+<RadzenText TextStyle="TextStyle.Overline" Text="Level" />
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
+    <RadzenNumeric ShowUpDown="true" TValue="int" Min="1" Max="10000" @bind-Value=@_creatureLevel Placeholder="Level" style="flex: 1"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="10" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureLevel = 10)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="50" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureLevel = 50)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="150" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureLevel = 150)"/>
+</div>
+<RadzenText TextStyle="TextStyle.Overline" Text="Distance" />
+<div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
+    <RadzenNumeric ShowUpDown="true" TValue="int" Min="1" Max="10000" @bind-Value=@_creatureDistance Placeholder="Distance" style="flex: 1"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="1500" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureDistance = 1500)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="2000" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureDistance = 2000)"/>
+    <div style="flex: 0 0 0.5rem;"></div>
+    <RadzenButton Text="2500" style="flex: 0 0 1;" Size="ButtonSize.Small" Click="@(() => _creatureDistance = 2500)"/>
+</div>
+
+<List Items="@(_filtered ?? _data)" TItem="ArkDino" Context="item">
+    <ItemContent>
+        <RadzenCard Style="width: 100%; padding:0.5rem" class="rz-mb-2">
+            <div style="display: flex; align-items: start; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 1rem;">
+                <div style="flex: 1;">
+                    <RadzenText Text=@(item.Name) TextStyle="TextStyle.Subtitle1" />
+                    <RadzenText Text=@(item.Description) TextStyle="TextStyle.Body2" />
+                    <div style="margin-bottom: 0.25rem;margin-top: 0.5rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;">
+                    @foreach(var category in item.Categories.Where(x => x.IsKind))
+                    {
+                        <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Primary" Text=@category.Name />
+                    }
+                    </div>
+                    <div style="margin-bottom: 0.25rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;">
+                    @foreach(var category in item.Categories.Where(x => x.IsTaming))
+                    {
+                        <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Secondary" Text=@category.Name />
+                    }
+                    </div>
+                    <div style="margin-bottom: 0.25rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;">
+                    @foreach(var category in item.Categories.Where(x => x.IsRideable))
+                    {
+                        <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Light" Text=@category.Name />
+                    }
+                    </div>
+                </div>
+                <div style="flex: 0 0 0.5rem;"></div>
+                <img src="@(item.ImageSource)" style="max-width: 200px; max-height: 150px; flex: 0" />
+            </div>
+            
+            <RadzenText Text="Summon Tamed" TextStyle="TextStyle.Overline"/>
+            @foreach(var blueprint_c in item.BlueprintsCharacter)
+            {
+                <CopyTextBox Text=@BuildGmSummon(blueprint_c)/>
+                <div style="height: 2px;" />
+            }
+            <RadzenText Text="Spawn Wild" TextStyle="TextStyle.Overline"/>
+            @foreach(var blueprint_path in item.Paths)
+            {
+                <CopyTextBox Text=@BuildSpawnDino(blueprint_path)/>
+                <div style="height: 2px;" />
+            }
+        </RadzenCard>
+    </ItemContent>
+    <Placeholder>
+        <div>Loading..</div>
+    </Placeholder>
+</List>
+
+@code
+{
+    private int _creatureDistance = 1500;
+    private int _creatureLevel = 150;
+    private ICollection<ArkDino> _data = Array.Empty<ArkDino>();
+    private ICollection<ArkDino>? _filtered = null;
+
+    private string BuildSpawnDino(string blueprint_path)
+        => $"cheat SpawnDino \u0022Blueprint\u0027{blueprint_path}\u0027\u0022 {_creatureDistance} 0 0 {_creatureLevel}";
+    
+    private string BuildGmSummon(string blueprint_c)
+        => $"cheat gmsummon \"{blueprint_c}\" {_creatureLevel}";
+
+    private void Search(string? text)
+    {
+        if (text == null || text.Length < 3) 
+        {
+            _filtered = null;
+            return;
+        }
+
+        var searchToken = text.ToLowerInvariant();
+
+        _filtered = 
+            _data.Select(x => new{ Data = x, NameIdx = x.Name.ToLowerInvariant().IndexOf(searchToken) })
+                .Where(x => x.NameIdx > -1)
+                .OrderBy(x => x.NameIdx)
+                .Select(x => x.Data)
+                .ToArray();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _filtered = _data = (await Http.GetFromJsonAsync<ArkDinoData>("data-dino.json"))?.Creatures.Where(x => x.BlueprintsCharacter.Any() || x.Paths.Any()).ToArray() ?? Array.Empty<ArkDino>();
+
+        await base.OnInitializedAsync();
+    }
+}

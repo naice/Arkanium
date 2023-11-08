@@ -9,3 +9,4 @@ public class ArkCreatureData
 	public string Image48Source { get; set; } = string.Empty;
 	public string Image120Source { get; set; } = string.Empty;
 }
+
