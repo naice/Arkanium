@@ -1,0 +1,8 @@
+/* /Controls/Overlay/OverlayHost.razor.rz.scp.css */
+/* /MainLayout.razor.rz.scp.css */
+.layout-header[b-fmblj4t0bo] {
+    height: var(--layout-header-height, 50px);
+}
+.layout-footer[b-fmblj4t0bo] {
+    height: var(--layout-footer-height, 50px);
+}
