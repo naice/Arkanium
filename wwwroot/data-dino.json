@@ -9933,6 +9933,124 @@
       ]
     },
     {
+      "Id": "maewing",
+      "Name": "Maewing",
+      "Paths": [],
+      "Blueprints": [
+        "milkglider_character_bp_early"
+      ],
+      "BlueprintsCharacter": [
+        "milkglider_character_bp_early_C"
+      ],
+      "ImageSource": "image/dinos/maewing.png",
+      "Eats": [
+        "Basic Kibble",
+        "Raw Mutton",
+        "Raw Prime Meat",
+        "Cooked Lamb Chop",
+        "Cooked Prime Meat",
+        "Raw Prime Fish Meat",
+        "Raw Meat",
+        "Crops",
+        "Mejoberry",
+        "Cooked Prime Fish Meat",
+        "Cooked Meat",
+        "Berries",
+        "Raw Fish Meat",
+        "Cooked Fish Meat",
+        "Fresh Barley, Fresh Wheat, or Soybean",
+        "Dried Wheat"
+      ],
+      "TamingNotice": "",
+      "Description": "The Maewing is an \u0022interstellar wet nurse\u0022 in ARK: Genesis Part 2. It resembles a platypus mixed with a flying squirrel and has some sort of ability to glide. The Maewing is described as an \u0022interstellar wet nurse\u0022 and is able to lure offspring of other creatures using its irresistible teats. Nice! \uD83D\uDE0F",
+      "CarriedBy": [
+        "wyvern",
+        "quetzal"
+      ],
+      "Categories": [
+        {
+          "Name": "Terrestrial",
+          "IsMap": false,
+          "IsKind": true,
+          "IsTaming": false,
+          "IsRideable": false,
+          "IsDiet": false
+        },
+        {
+          "Name": "Rideable",
+          "IsMap": false,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": true,
+          "IsDiet": false
+        },
+        {
+          "Name": "Utility Saddle",
+          "IsMap": false,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": true,
+          "IsDiet": false
+        },
+        {
+          "Name": "Multi-Passenger",
+          "IsMap": false,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": true,
+          "IsDiet": false
+        },
+        {
+          "Name": "Tamable",
+          "IsMap": false,
+          "IsKind": false,
+          "IsTaming": true,
+          "IsRideable": false,
+          "IsDiet": false
+        },
+        {
+          "Name": "Knockout Taming",
+          "IsMap": false,
+          "IsKind": false,
+          "IsTaming": true,
+          "IsRideable": false,
+          "IsDiet": false
+        },
+        {
+          "Name": "Omnivores",
+          "IsMap": false,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": false,
+          "IsDiet": true
+        },
+        {
+          "Name": "Genesis Part 2",
+          "IsMap": true,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": false,
+          "IsDiet": false
+        },
+        {
+          "Name": "Lost Island",
+          "IsMap": true,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": false,
+          "IsDiet": false
+        },
+        {
+          "Name": "Fjordur",
+          "IsMap": true,
+          "IsKind": false,
+          "IsTaming": false,
+          "IsRideable": false,
+          "IsDiet": false
+        }
+      ]
+    },
+    {
       "Id": "mammoth",
       "Name": "Mammoth",
       "Paths": [
@@ -17192,14 +17310,12 @@
     {
       "Id": "snowowl",
       "Name": "Snow Owl",
-      "Paths": [
-        "/Game/Extinction/Dinos/Owl/Owl_Character_BP.Owl_Character_BP"
-      ],
+      "Paths": [],
       "Blueprints": [
-        "Owl_Character_BP"
+        "owl_character_bp_early"
       ],
       "BlueprintsCharacter": [
-        "Owl_Character_BP_C"
+        "owl_character_bp_early_C"
       ],
       "ImageSource": "image/dinos/snowowl.png",
       "Eats": [
