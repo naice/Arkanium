@@ -13,9 +13,21 @@
 @inject ILogger<Index> Log
 
 <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
-    <RadzenTextBox @oninput="(x) => Search(x?.Value?.ToString())" Placeholder="Find creatures..." style="flex: 1"/>
+    <RadzenTextBox @oninput="(x) => Search(x?.Value?.ToString())" @bind-Value="_searchToken" Placeholder="Find creatures..." style="flex: 1"/>
     <div style="flex: 0 0 0.5rem;"></div>
     <RadzenButton Icon="search" style="flex: 0 0 32px;"/>
+</div>
+<div style="margin-bottom: 0.5rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem; flex-wrap: wrap;">
+@foreach(var category in _data.SelectMany(x => x.Categories).Where(x => x.IsKind || x.IsRideable || x.IsTaming).OrderBy(x => x.IsKind ? 1 : x.IsTaming ? 2 : x.IsRideable ? 3 : 4).DistinctBy(x => x.Name))
+{
+    <RadzenBadge 
+        Text=@category.Name
+        IsPill="true"
+        @onclick=@(() => CategoryFilter(category.Name))
+        Variant="@(_catergoryFilter.Contains(category.Name) ? Variant.Flat : Variant.Outlined)" 
+        BadgeStyle="ByCatergory(category)"
+        style="cursor:pointer;user-select: none;"/>
+}
 </div>
 <RadzenText TextStyle="TextStyle.Overline" Text="Level" />
 <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: flex-end; margin-bottom: 0.5rem; height: 38px; overflow-y: hidden;">
@@ -45,22 +57,34 @@
                 <div style="flex: 1;">
                     <RadzenText Text=@(item.Name) TextStyle="TextStyle.Subtitle1" />
                     <RadzenText Text=@(item.Description) TextStyle="TextStyle.Body2" />
-                    <div style="margin-bottom: 0.25rem;margin-top: 0.5rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;">
+                    <div style="margin-bottom: 0.25rem;margin-top: 0.5rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem; flex-wrap: wrap;">
                     @foreach(var category in item.Categories.Where(x => x.IsKind))
                     {
-                        <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Primary" Text=@category.Name />
+                        <RadzenBadge 
+                            Text=@category.Name
+                            IsPill="true"
+                            Variant="@(_catergoryFilter.Contains(category.Name) ? Variant.Flat : Variant.Outlined)" 
+                            BadgeStyle="ByCatergory(category)"/>
                     }
                     </div>
-                    <div style="margin-bottom: 0.25rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;">
+                    <div style="margin-bottom: 0.25rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;flex-wrap: wrap;">
                     @foreach(var category in item.Categories.Where(x => x.IsTaming))
                     {
-                        <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Secondary" Text=@category.Name />
+                        <RadzenBadge 
+                            Text=@category.Name
+                            IsPill="true"
+                            Variant="@(_catergoryFilter.Contains(category.Name) ? Variant.Flat : Variant.Outlined)" 
+                            BadgeStyle="ByCatergory(category)"/>
                     }
                     </div>
-                    <div style="margin-bottom: 0.25rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;">
+                    <div style="margin-bottom: 0.25rem; display: flex; align-items: start; justify-content: start; gap: 0.25rem;flex-wrap: wrap;">
                     @foreach(var category in item.Categories.Where(x => x.IsRideable))
                     {
-                        <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Light" Text=@category.Name />
+                        <RadzenBadge 
+                            Text=@category.Name
+                            IsPill="true"
+                            Variant="@(_catergoryFilter.Contains(category.Name) ? Variant.Flat : Variant.Outlined)" 
+                            BadgeStyle="ByCatergory(category)"/>
                     }
                     </div>
                 </div>
@@ -93,15 +117,39 @@
     private int _creatureLevel = 150;
     private ICollection<ArkDino> _data = Array.Empty<ArkDino>();
     private ICollection<ArkDino>? _filtered = null;
+    private string _searchToken = string.Empty;
+    private System.Collections.Generic.List<string> _catergoryFilter = new();
 
     private string BuildSpawnDino(string blueprint_path)
         => $"cheat SpawnDino \u0022Blueprint\u0027{blueprint_path}\u0027\u0022 {_creatureDistance} 0 0 {_creatureLevel}";
     
     private string BuildGmSummon(string blueprint_c)
         => $"cheat gmsummon \"{blueprint_c}\" {_creatureLevel}";
+    private void CategoryFilter(string filter)
+    {
+        _searchToken = string.Empty;
+        if (_catergoryFilter.Contains(filter))
+            _catergoryFilter.Remove(filter);
+        else
+            _catergoryFilter.Add(filter);
+
+        if (!_catergoryFilter.Any())
+            _filtered = _data;
+        else
+            _filtered = 
+                _data.Where(x => _catergoryFilter.All(y => x.Categories.Any(x => x.Name == y)))
+                    .ToArray();
+    }
+
+    private BadgeStyle ByCatergory(ArkDinoCategory cat) 
+        => cat.IsKind ? BadgeStyle.Primary : 
+           cat.IsTaming ? BadgeStyle.Secondary : 
+           cat.IsRideable ? BadgeStyle.Light : 
+           BadgeStyle.Danger;
 
     private void Search(string? text)
     {
+        _catergoryFilter.Clear();
         if (text == null || text.Length < 3) 
         {
             _filtered = null;
